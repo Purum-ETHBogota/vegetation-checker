@@ -38,15 +38,20 @@ const Tag = (props: { type: string, value: string | number }) => {
   }
 
   return (
-    <StyledTag color={color} tagBackground={background}>
+    <StyledTag color={color} background={background}>
       {value}
     </StyledTag>
   );
 };
 
-const StyledTag = styled.span`
+interface TagInterface {
+  readonly color: string;
+  readonly background: string,
+}
+
+const StyledTag = styled.span<TagInterface>`
     padding: 5px 12px;
-    background-color: ${({ tagBackground }) => tagBackground};
+    background-color: ${({ background }) => background};
     color: ${({ color }) => color};
     font-size: 10px;
     font-weight: 700;
