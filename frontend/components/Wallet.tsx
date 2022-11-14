@@ -20,9 +20,10 @@ const Wallet = () => {
   useEffect(() => {
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
       if (accounts.length > 0) {
-        setButtonText(`${accounts[0].slice(0, 5)}…${accounts[0].slice(-3)}`);
+        const firstAccount: string = accounts[0];
+        setButtonText(`${firstAccount.slice(0, 5)}…${firstAccount.slice(-3)}`);
         setDisabled(true);
-        onboarding.current.stopOnboarding();
+        onboarding?.current?.stopOnboarding();
       } else {
         setButtonText(CONNECT_TEXT);
         setDisabled(false);
@@ -51,7 +52,7 @@ const Wallet = () => {
         .request({ method: 'eth_requestAccounts' })
         .then((newAccounts: React.SetStateAction<never[]>) => setAccounts(newAccounts));
     } else {
-      onboarding.current.startOnboarding();
+      onboarding?.current?.startOnboarding();
     }
   };
 

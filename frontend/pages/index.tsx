@@ -14,7 +14,6 @@ export default function Home() {
       <Header />
       <WrapperNewProject>
         <Button
-          type="create"
           text="Create new Project"
           handler={handleNewProject}
         />
