@@ -1,3 +1,5 @@
+/external-adapter/node_modules
+/external-adapter/.env
 # Logs
 logs
 *.log
