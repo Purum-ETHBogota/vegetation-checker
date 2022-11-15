@@ -22,5 +22,5 @@ Check if it is installed: pip show matplotlib
 
 ## Algorithm
 
-- We uss color segmentation. https://realpython.com/python-opencv-color-spaces/
+- We use color segmentation. https://realpython.com/python-opencv-color-spaces/
 - Github repo: https://github.com/realpython/materials/blob/master/opencv-color-spaces/finding-nemo.py
