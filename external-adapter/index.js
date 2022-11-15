@@ -24,26 +24,26 @@ const customError = (data) => {
 // Extra parameters can be stated in the extra object,
 // with a Boolean value indicating whether or not they
 // should be required.
-// const customParams = {
-//   polyid: ['polyid'],
-// }
+const customParams = {
+  polyid: ['polyid']
+}
 
 const createRequest = (input, callback) => {
   // The Validator helps you validate the Chainlink request data
-  const validator = new Validator(callback, input)
+  const validator = new Validator(callback, input, customParams)
   const jobRunID = validator.validated.id
-  //const polyid = validator.validated.data.polyId
+  //const polyid = validator.validated.data.polyid;
   const start = '1662033600'
   const end = '1664971200'
   const appid = process.env.AGRO_API_KEY
 
   //const url = 'https://api.agromonitoring.com/agro/1.0/image/search?'
   const url = `http://api.agromonitoring.com/agro/1.0/image/search?start=1662033600&end=1664971200&polyid=633f89f3a505b956ba8dbcd8&appid=${appid}`
+  console.log('This is the polyid: ' + JSON.stringify(validator));
+  console.log('This is the customParams value: '+ JSON.stringify(customParams));
 
   const params = {
-    start,
-    end,
-    //polyid,
+    // polyid,
     appid,
   }
 
@@ -58,7 +58,7 @@ const createRequest = (input, callback) => {
   // headers = 'headers.....'
   const config = {
     url,
-    //params,
+    // params
   }
 
   // The Requester allows API calls be retry in case of timeout
