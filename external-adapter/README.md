@@ -18,8 +18,8 @@ yarn
 yarn start
 ```
 
-4. Call the external adapter/API server
+4. Call the external adapter/API server. Sample polyid: 633f89f3a505b956ba8dbcd8
 
 ```bash
-curl -X POST -H "content-type:application/json" "http://localhost:8080/" --data '{ "id": 0 }'
+curl -X POST -H "content-type:application/json" "http://localhost:8080/" --data '{ "id": 0, "data":{"polyid":"633f89f3a505b956ba8dbcd8"} }'
 ```
