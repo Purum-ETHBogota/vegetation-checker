@@ -30,12 +30,10 @@ const customParams = {
 
 const createRequest = (input, callback) => {
   // The Validator helps you validate the Chainlink request data
-  const validator = new Validator(callback, input)
+  const validator = new Validator(callback, input, customParams)
   const jobRunID = validator.validated.id
-  const polyid = validator.input.data.polyid
+  const polyid = validator.validated.data.polyid
 
-  const start = '1662033600'
-  const end = '1664971200'
   const appid = process.env.AGRO_API_KEY
 
   //const url = 'https://api.agromonitoring.com/agro/1.0/image/search?'
