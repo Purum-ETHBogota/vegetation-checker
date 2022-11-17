@@ -6,38 +6,49 @@ import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract PurumNFT is ChainlinkClient, ConfirmedOwner, ERC721 {
+contract tally2NFT is ChainlinkClient, ConfirmedOwner, ERC721 {
     //NFT variables
     string public constant TOKEN_URI =
-        "ipfs://bafybeig37ioir76s7mg5oobetncojcm3c3hxasyd4rvid4jqhy4gkaheg4/?filename=0-PUG.json";
+        "https://nftstorage.link/ipfs/bafkreihufrdyxxjrbuqbwx7u45cpa56gjvtik66te3sqwshr22s7asvpby";
     uint256 private s_tokenCounter;
 
     //GET request variables
     using Chainlink for Chainlink.Request;
-
-    uint256 public NDVI;
     bytes32 private jobId;
     uint256 private fee;
 
-    event RequestNDVI(bytes32 indexed requestId, uint256 NDVI);
+    event RequestImage(bytes32 indexed requestId, string CID);
+
+    //GeoNFT data
+    //In this array we will store the CIDs of the images:
+    string[] public images;
+    //This is the score calculated by bacalhau
+    uint256 public score;
+    //This is an array with the output data from bacalhau
+    string[] public bacOutput;
+    //Coordinates
+    int256 public coord1;
+    int256 public coord2;
+    int256 public coord3;
 
     /**
      * @notice Initialize the link token and target oracle
      *
      * Mumbai Testnet details:
      * Link Token: 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
-     * Oracle: 0x40193c8518BB267228Fc409a613bDbD8eC5a97b3 (Chainlink DevRel)
-     * jobId: ca98366cc7314957b8c012c72f05aeeb
+     * Oracle: 0x48e9d3Ce9E2947f41d38bBe3Ba29F7f7eC3589Dc (in Google CLoud)
+     * jobId: 7e78d84cdca540b0ba8a10652d18641a
      *
      */
-    constructor() ConfirmedOwner(msg.sender) ERC721("Purum", "PUR") {
+    constructor() ConfirmedOwner(msg.sender) ERC721("Tally", "TLY") {
         //NFT variables
         s_tokenCounter = 0;
 
-        //GET request stuff
+        //GET request
         setChainlinkToken(0x326C977E6efc84E512bB9C30f76E30c160eD06FB);
-        setChainlinkOracle(0x40193c8518BB267228Fc409a613bDbD8eC5a97b3);
-        jobId = "ca98366cc7314957b8c012c72f05aeeb";
+        setChainlinkOracle(0x48e9d3Ce9E2947f41d38bBe3Ba29F7f7eC3589Dc);
+        jobId = "7e78d84cdca540b0ba8a10652d18641a";
+
         fee = (1 * LINK_DIVISIBILITY) / 10; // 0,1 * 10**18 (Varies by network and job)
     }
 
@@ -45,13 +56,13 @@ contract PurumNFT is ChainlinkClient, ConfirmedOwner, ERC721 {
      * Create a Chainlink request to retrieve API response, find the target
      * data, then multiply by 1000000000000000000 (to remove decimal places from data).
      */
-    function requestNDVIData() public returns (bytes32 requestId) {
+    function requestCIDdata() public returns (bytes32 requestId) {
         Chainlink.Request memory req = buildChainlinkRequest(
             jobId,
             address(this),
             this.fulfill.selector
         );
-
+        /*
         // Set the URL to perform the GET request on
         //req.add('get', 'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=ETH&tsyms=USD');
         req.add(
@@ -63,20 +74,20 @@ contract PurumNFT is ChainlinkClient, ConfirmedOwner, ERC721 {
         // Multiply the result by 1000000000000000000 to remove decimals
         int256 timesAmount = 10**18;
         req.addInt("times", timesAmount);
-
+        */
         // Sends the request
         return sendChainlinkRequest(req, fee);
     }
 
     /**
-     * Receive the response in the form of uint256
+     * Receive the response in the form of string
      */
-    function fulfill(bytes32 _requestId, uint256 _NDVI)
+    function fulfill(bytes32 _requestId, string memory _CID)
         public
         recordChainlinkFulfillment(_requestId)
     {
-        emit RequestNDVI(_requestId, _NDVI);
-        NDVI = _NDVI;
+        emit RequestImage(_requestId, _CID);
+        images.push(_CID);
     }
 
     /**
