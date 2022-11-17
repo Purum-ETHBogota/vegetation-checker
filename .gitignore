@@ -1,3 +1,11 @@
+#hardhat
+/hardhat/node_modules
+/hardhat/.env
+/hardhat/yarn.lock
+/hardhat/artifacts
+/hardhat/cache
+/hardhat/deployments
+#External Adapter
 /external-adapter/node_modules
 /external-adapter/.env
 # Logs
