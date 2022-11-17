@@ -13,7 +13,7 @@ const Card = (props: {
     country: string;
     rating: string;
     purpose: string;
-    year: number;
+    year: string;
     image?: string;
   }) => {
   const { name, description, credits, verifier, country, rating, purpose, year, image } = props;
