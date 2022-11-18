@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import Button from "../components/Button";
@@ -5,8 +6,12 @@ import Header from "../components/Header";
 import Card from "../components/Card";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
+const Modal = dynamic(
+  () => import('../components/Modal'),
+  { ssr: false }
+)
+  
 const APIURL = "https://api.thegraph.com/subgraphs/name/toucanprotocol/matic";
-
 const toucanQuery = `
   query($offset: Int) {
     projects(first: 9 skip: $offset) {
@@ -44,10 +49,16 @@ export default function Home() {
   const [data, setData] = useState([]);
   const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+  const [show, setShow] = useState(false);
 
   const handleNewProject = () => {
-    console.log("holi");
+    setShow(true);
   };
+
+  const onClose = () => {
+    setShow(false);
+  }
 
   useEffect(() => {
     client
@@ -73,11 +84,15 @@ export default function Home() {
     setLoading(true);
   };
 
+  const handleWalletConnected = () => {
+    setIsConnected(true);
+  }
+
   return (
     <>
-      <Header />
+      <Header handleWalletConnected={handleWalletConnected} />
       <WrapperNewProject>
-        <Button text="Create new Project" handler={handleNewProject} />
+        <Button text="Create new Project" disabled={!isConnected} handler={handleNewProject} />
       </WrapperNewProject>
       <WrapperCards>
         {data &&
@@ -107,11 +122,12 @@ export default function Home() {
                 }
               ];
             }) => {
-              console.log("project is ", project);
               return (
                 <Card
+                  // hasCoordinates={} Check if the polygon already exists
                   key={project.id}
                   name={project.projectId}
+                  isConnected={isConnected}
                   description={
                     project.vintages.length > 0
                       ? project.vintages[0].tco2Token.name
@@ -137,6 +153,13 @@ export default function Home() {
           )}
       </WrapperCards>
       {loading ? <Spinner /> : <LoadMore onClick={handleMore}>+</LoadMore>}
+      <Modal
+        show={show}
+        onClose={onClose}
+        hasCoordinates={false}
+        title="Create project"
+        newProject
+      />
       <FooterMessage>
         Project created for the Chainlink Hackathon by team Purum
       </FooterMessage>

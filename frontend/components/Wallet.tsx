@@ -5,7 +5,8 @@ import styled from 'styled-components';
 const ONBOARD_TEXT = 'Click here to install MetaMask!';
 const CONNECT_TEXT = 'Connect';
 
-const Wallet = () => {
+const Wallet = (props: { handleWalletConnected: any }) => {
+  const { handleWalletConnected } = props;
   const [buttonText, setButtonText] = useState(ONBOARD_TEXT);
   const [isDisabled, setDisabled] = useState(false);
   const [accounts, setAccounts] = useState([]);
@@ -23,6 +24,7 @@ const Wallet = () => {
         const firstAccount: string = accounts[0];
         setButtonText(`${firstAccount.slice(0, 5)}…${firstAccount.slice(-3)}`);
         setDisabled(true);
+        handleWalletConnected()
         onboarding?.current?.stopOnboarding();
       } else {
         setButtonText(CONNECT_TEXT);
