@@ -27,7 +27,7 @@ To create and debug the image I followed the following steps:
    sh
    ```
 
-4. Finally, with this command we can use bacalhau with the docker image to compute over data (pictures) on IPFS. I uploaded some pictures at this CID: Qmbjc3dqLoJ7FgF5RHqUxQEmHujqvmURbprXnfjiEwxeAV. One really IMPORTANT detail to mention is that the CID that you need to pass to bacalhau has to be a folder with the data! not a picture!
+4. Finally, with this command we can use bacalhau with the docker image to compute over data (pictures) on IPFS. I uploaded some pictures at this CID: Qmbjc3dqLoJ7FgF5RHqUxQEmHujqvmURbprXnfjiEwxeAV. One really IMPORTANT detail to mention is that the CID that you need to pass to bacalhau has to be a folder with the data! not a picture!... YOu can try this command in your terminal if you have installed bacalhau:
    ```
    bacalhau docker run \
    -v Qmbjc3dqLoJ7FgF5RHqUxQEmHujqvmURbprXnfjiEwxeAV:/inputs \

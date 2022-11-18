@@ -20,7 +20,21 @@ We wil need OpenCV, numpy and matplotlib to run `full-color-seg.py`, this implem
 Install: python3 -m pip install -U matplotlib
 Check if it is installed: pip show matplotlib
 
+## Run the scripts
+
+Now that we have installed the needed packages we can run
+
+```
+python3 color-seg.py
+```
+
+or
+
+```
+full-color-seg.py
+```
+
 ## Algorithm
 
-- We use color segmentation. https://realpython.com/python-opencv-color-spaces/
-- Github repo: https://github.com/realpython/materials/blob/master/opencv-color-spaces/finding-nemo.py
+- We use [color segmentation](https://realpython.com/python-opencv-color-spaces/)
+- [Github repo](https://github.com/realpython/materials/blob/master/opencv-color-spaces/finding-nemo.py)

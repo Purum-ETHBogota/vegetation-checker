@@ -18,10 +18,8 @@ yarn
 yarn start
 ```
 
-4. Call the external adapter/API server. Sample polyid: 633f89f3a505b956ba8dbcd8
+4. Call the external adapter/API server. We need to pass the polyid paramenter to the function in order to work. The polyid is an identifier tha the API use to identify registered polygons we will be using this sample polyid: _633f89f3a505b956ba8dbcd8_, but you can create your own in the [website](https://agromonitoring.com/api).
 
 ```bash
 curl -X POST -H "content-type:application/json" "http://localhost:8080/" --data '{ "id": 0, "data":{"polyid":"633f89f3a505b956ba8dbcd8"} }'
 ```
-API TEST:
-http://api.agromonitoring.com/agro/1.0/image/search?start=1662033600&end=1662508011&polyid=633f89f3a505b956ba8dbcd8&appid=e0ed9b975585c879861d8d3854b792bc
