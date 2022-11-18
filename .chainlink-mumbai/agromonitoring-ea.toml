@@ -1,23 +1,21 @@
 type = "directrequest"
 schemaVersion = 1
-name = "agromonitoring-ea-small-5"
-contractAddress = "0x40193c8518BB267228Fc409a613bDbD8eC5a97b3"
+name = "agromonitoring-operator-2"
 maxTaskDuration = "0s"
+contractAddress = "0xc30424976eCd71bfb50F5b2233B62De6A3AaA3d1"
 observationSource = """
-    decode_log   [type=ethabidecodelog
+    decode_log   [type="ethabidecodelog"
                   abi="OracleRequest(bytes32 indexed specId, address requester, bytes32 requestId, uint256 payment, address callbackAddr, bytes4 callbackFunctionId, uint256 cancelExpiration, uint256 dataVersion, bytes data)"
                   data="$(jobRun.logData)"
                   topics="$(jobRun.logTopics)"]
-
-    decode_cbor  [type=cborparse data="$(decode_log.data)"]
+    decode_cbor     [type="cborparse" data="$(decode_log.data)"]
     fetch        [type=bridge name="agromonitoring-ea" requestData="{\\"id\\": $(jobSpec.externalJobID), \\"data\\": { \\"polyid\\": $(decode_cbor.polyid)}}"]
-    parse        [type=jsonparse path="result" data="$(fetch)"]
-    encode_data  [type=ethabiencode abi="(bytes32 requestId,string value)" data="{\\"requestId\\": $(decode_log.requestId),\\"value\\": $(parse) }"]
-    encode_tx    [type=ethabiencode
-                  abi="fulfillOracleRequest(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, string data)"
-                  data="{\\"requestId\\": $(decode_log.requestId), \\"payment\\": $(decode_log.payment), \\"callbackAddress\\": $(decode_log.callbackAddr), \\"callbackFunctionId\\": $(decode_log.callbackFunctionId), \\"expiration\\": $(decode_log.cancelExpiration), \\"data\\": $(encode_data)}"
-                 ]
-    submit_tx    [type=ethtx to="0x40193c8518BB267228Fc409a613bDbD8eC5a97b3" data="$(encode_tx)"]
-
+    parse           [type=jsonparse path="result" data="$(fetch)"]
+    encode_data     [type="ethabiencode" abi="(bytes32 requestId, string string1)" data="{ \\"requestId\\": $(decode_log.requestId), \\"string1\\": $(parse)}"]
+    encode_tx       [type="ethabiencode"
+                      abi="fulfillOracleRequest2(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes calldata data)"
+                      data="{\\"requestId\\": $(decode_log.requestId), \\"payment\\": $(decode_log.payment), \\"callbackAddress\\": $(decode_log.callbackAddr), \\"callbackFunctionId\\": $(decode_log.callbackFunctionId), \\"expiration\\": $(decode_log.cancelExpiration), \\"data\\": $(encode_data)}"
+                    ]
+    submit_tx    [type="ethtx" to="0xc30424976eCd71bfb50F5b2233B62De6A3AaA3d1" data="$(encode_tx)"]
     decode_log -> decode_cbor -> fetch -> parse -> encode_data -> encode_tx -> submit_tx
 """
