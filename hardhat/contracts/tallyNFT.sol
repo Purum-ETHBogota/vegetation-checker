@@ -36,6 +36,11 @@ contract tallyNFT is ChainlinkClient, ERC721 {
         int256 _coord2,
         int256 _coord3
     ) ERC721("Tally", "TLY") {
+        //coordinates
+        coord1 = _coord1;
+        coord2 = _coord2;
+        coord3 = _coord3;
+
         //NFT variables
         s_tokenCounter = 0;
 
