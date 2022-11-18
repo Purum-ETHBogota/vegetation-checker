@@ -1,10 +1,20 @@
 // SPDX-License-Identifier: MIT
+// block-farms.io
+// Discord=https://discord.gg/PgxRVrDUm7
+
 pragma solidity ^0.8.7;
 
+import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract tallyNFT is ERC721 {
-    //NFT variables
+contract tallyNFT is ChainlinkClient, ERC721 {
+    using Chainlink for Chainlink.Request;
+    //Chainlink
+    string public stringVariable;
+    bytes32 private externalJobId;
+    uint256 private oraclePayment;
+
+    //NFT
     string public constant TOKEN_URI =
         "https://nftstorage.link/ipfs/bafkreihufrdyxxjrbuqbwx7u45cpa56gjvtik66te3sqwshr22s7asvpby";
     uint256 private s_tokenCounter;
@@ -28,9 +38,38 @@ contract tallyNFT is ERC721 {
     ) ERC721("Tally", "TLY") {
         //NFT variables
         s_tokenCounter = 0;
-        coord1 = _coord1;
-        coord2 = _coord2;
-        coord3 = _coord3;
+
+        //Chainlink
+        setChainlinkToken(0x326C977E6efc84E512bB9C30f76E30c160eD06FB);
+        setChainlinkOracle(0xc30424976eCd71bfb50F5b2233B62De6A3AaA3d1);
+        externalJobId = "057684b91dcc415d82423de1058fcbad";
+        oraclePayment = (1 * LINK_DIVISIBILITY) / 10; // n * 10**18
+    }
+
+    function requestString(string memory _polyid) public {
+        Chainlink.Request memory req = buildChainlinkRequest(
+            externalJobId,
+            address(this),
+            this.fulfillString.selector
+        );
+        //req.add("get", "https://API_endpoint_url");
+        //req.add("path1", "data,results");
+        req.add("polyid", _polyid);
+        sendOperatorRequest(req, oraclePayment);
+    }
+
+    event RequestFulfilled(
+        bytes32 indexed requestId,
+        string indexed stringVariable
+    );
+
+    function fulfillString(bytes32 requestId, string calldata _stringVariable)
+        public
+        recordChainlinkFulfillment(requestId)
+    {
+        emit RequestFulfilled(requestId, _stringVariable);
+        stringVariable = _stringVariable;
+        images.push(stringVariable);
     }
 
     // ERC721 functionality
