@@ -4,11 +4,13 @@ import Image from 'next/image';
 import logo from '../public/logo.png';
 import Wallet from './Wallet';
 
-const Header = () => {
+const Header = (props: { handleWalletConnected: any }) => {
+  const { handleWalletConnected } = props;
+
   return (
     <StyledDiv>
       <Image src={logo} alt="Hypertally" />
-      <Wallet />
+      <Wallet handleWalletConnected={handleWalletConnected} />
     </StyledDiv>
   )
 }
