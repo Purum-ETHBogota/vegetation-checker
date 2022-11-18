@@ -37,7 +37,7 @@ const createRequest = (input, callback) => {
   const appid = process.env.AGRO_API_KEY
 
   //const url = 'https://api.agromonitoring.com/agro/1.0/image/search?'
-  const url = `http://api.agromonitoring.com/agro/1.0/image/search?start=1662033600&end=1664971200&polyid=${polyid}&appid=${appid}`
+  const url = `http://api.agromonitoring.com/agro/1.0/image/search?start=1662033600&end=1662508011&polyid=${polyid}&appid=${appid}`
 
   console.log(`This is the polyid: ${polyid} `)
   console.log('This is the validator: ' + JSON.stringify(validator))
