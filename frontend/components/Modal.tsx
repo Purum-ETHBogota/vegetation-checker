@@ -6,6 +6,7 @@ import arrow from "../public/arrow.png";
 import Input from "./Input";
 import Button from "./Button";
 import defaultImage from "../public/defaultProjectImage.jpg";
+import { ethers } from "ethers";
 
 const Modal = (props: {
   hasCoordinates: boolean;
@@ -14,6 +15,7 @@ const Modal = (props: {
   definedCoordinates?: any;
   newProject?: boolean;
   title: string;
+  accounts?: any;
   projectName?: string;
   dateReview?: string;
   image?: any;
@@ -28,10 +30,18 @@ const Modal = (props: {
     title,
     projectName,
     dateReview,
+    accounts,
     image,
     score,
   } = props;
 
+  const factoryABI: any = [{"type":"event","anonymous":false,"name":"NFTCreated","inputs":[{"type":"address","name":"NFTAddress","indexed":true}]},{"type":"function","name":"createNFT","constant":false,"payable":false,"inputs":[{"type":"int256","name":"_coord1"},{"type":"int256","name":"_coord2"},{"type":"int256","name":"_coord3"}],"outputs":[]},{"type":"function","name":"getTotalNFTS","constant":true,"stateMutability":"view","payable":false,"inputs":[],"outputs":[{"type":"uint256","name":"count"}]},{"type":"function","name":"nftsArray","constant":true,"stateMutability":"view","payable":false,"inputs":[{"type":"uint256"}],"outputs":[{"type":"address"}]}];
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
+  const signer = provider.getSigner()
+  let contractAddress = '0xC7072B0609C8D3C0A75694AcfE74122B9eA3e00f';
+  
+  const contract = new ethers.Contract(contractAddress, factoryABI, signer)
+  
   const [isBrowser, setIsBrowser] = useState(false);
   const [coordinateOne, setCoordinateOne] = useState("");
   const [coordinateTwo, setCoordinateTwo] = useState("");
@@ -54,7 +64,7 @@ const Modal = (props: {
   };
 
   const createProject = () => {
-    console.log('Trigger of the external adapter for a new project');
+    contract.createNFT(1234, 14123, 12312);
     onClose();
   }
 

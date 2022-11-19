@@ -5,8 +5,8 @@ import styled from 'styled-components';
 const ONBOARD_TEXT = 'Click here to install MetaMask!';
 const CONNECT_TEXT = 'Connect';
 
-const Wallet = (props: { handleWalletConnected: any }) => {
-  const { handleWalletConnected } = props;
+const Wallet = (props: { handleWalletConnected: any, accountConnected: any }) => {
+  const { handleWalletConnected, accountConnected } = props;
   const [buttonText, setButtonText] = useState(ONBOARD_TEXT);
   const [isDisabled, setDisabled] = useState(false);
   const [accounts, setAccounts] = useState([]);
@@ -36,6 +36,7 @@ const Wallet = (props: { handleWalletConnected: any }) => {
   useEffect(() => {
     function handleNewAccounts(newAccounts: React.SetStateAction<never[]>) {
       setAccounts(newAccounts);
+      accountConnected(newAccounts);
     }
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
       window.ethereum

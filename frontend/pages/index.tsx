@@ -50,6 +50,7 @@ export default function Home() {
   const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+  const [accounts, setAccounts] = useState('');
   const [show, setShow] = useState(false);
 
   const handleNewProject = () => {
@@ -88,9 +89,13 @@ export default function Home() {
     setIsConnected(true);
   }
 
+  const accountConnected = (e: any) => {
+    setAccounts(e);
+  }
+
   return (
     <>
-      <Header handleWalletConnected={handleWalletConnected} />
+      <Header handleWalletConnected={handleWalletConnected} accountConnected={accountConnected} />
       <WrapperNewProject>
         <Button text="Create new Project" disabled={!isConnected} handler={handleNewProject} />
       </WrapperNewProject>
@@ -159,6 +164,7 @@ export default function Home() {
         hasCoordinates={false}
         title="Create project"
         newProject
+        accounts={accounts}
       />
       <FooterMessage>
         Project created for the Chainlink Hackathon by team Purum
